@@ -1,0 +1,3 @@
+[submodule "shawnlawsonModule"]
+	path = shawnlawsonModule
+	url = https://github.com/shawnlawson/shawnmodule.git
