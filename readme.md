@@ -27,22 +27,40 @@ _Programming Interactivity_, Chapter 14, Motion and Gestures.
 [Transforming Mirror](http://www.davidrokeby.com/mirrors.html)
 
 #### 4. Clone, Add, Commit, Push
-First is to make your own repository of files and sync it to github. Then, Clone this assignment directory to your computer. From within the folder of the clone, use the terminal. Replace _remote-url_ with something like _https://github.com/shawnlawson/shawnmodule.git_ and _folder-name_ with _shawn_
+First is to make your own repository of files and sync it to github. Then, Clone this assignment directory to your computer. From within the folder of the clone, use the terminal. 
+
+Make a branch, replace _your-branch-name_ with something unique, rcsid, etc.
 
 ```bash
-git submodule add remote-url folder-name
+git branch your-branch-name
+```
+Checkout _your-branch-name_ so that we're working in that branch.
+
+```bash
+git checkout your-branch-name
 ```
 
-Then you'll need to add and commit:
+Replace _remote-url_ with something like _https://github.com/shawnlawson/shawnmodule.git_ and _linked-folder-name_ with your name _shawnlawson_
+
+```bash
+git submodule add remote-url linked-folder-name
+```
+
+Then you'll need to add and commit.
 
 ```bash
 git commit -a -m 'adding submodule'
 ```
 
-Lastly, you'll need to push this back to the remote:
+You'll need to push your branch to the remote.
 
 ```bash
 git push
 ```
+From the github web interface for this assignment's repository you'll create a new pull request.
+
+Base will be master, compare will be _your-branch-name_
+
+Create the request. You shouldn't accept your own pull request. Someone else, me or another person, should review the request to make sure none of the other files in the repository were modified before accepting. Sort of like a checks and balances system. 
 
 __Warning__ you can only push if you're a member of our organization. And, do not delete anything from the repository before pushing.
