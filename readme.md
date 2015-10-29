@@ -5,7 +5,7 @@
 1. Camera
 2. Installation Drawings
 3. Read
-4. Clone, Add, Commit, Push
+4. Turning In
 
 #### 1. Camera
 Use a still camera, video camera, kinect, leap motion or other image capture device in an interactive/reactive project. This project is required to be at least responsive to a participant.
@@ -26,7 +26,7 @@ _Programming Interactivity_, Chapter 14, Motion and Gestures.
 
 [Transforming Mirror](http://www.davidrokeby.com/mirrors.html)
 
-#### 4. Clone, Add, Commit, Push
+#### 4. Turning In
 First is to make your own repository of files and sync it to github. Then, Clone this assignment directory to your computer. From within the folder of the clone, use the terminal. 
 
 Make a branch, replace _your-branch-name_ with something unique, rcsid, etc.
