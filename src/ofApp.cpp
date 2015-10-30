@@ -36,15 +36,15 @@ void ofApp::update(){
 
         grayImg.flagImageChanged();
 
-        conFinder.findContours(grayImg, 200, (kinect.width * kinect.height)/2, 10, false);
+        conFinder.findContours(grayImg, 400, (kinect.width * kinect.height)/2, 3, false);
 
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-     grayImg.draw(0,0);
-     conFinder.draw();
+    //  grayImg.draw(0,0);
+    //  conFinder.draw();
     // determine valid points in blob
     easyCam.begin();
     for (int i = 0; i < conFinder.nBlobs; i++){
@@ -58,8 +58,8 @@ void ofApp::drawBlobMesh(const ofxCvBlob &blob){
     ofRectangle rect = blob.boundingRect;
     ofMesh mesh;
     mesh.setMode(OF_PRIMITIVE_POINTS);
-    for (int j = rect.y; j < rect.getMaxX(); j += 1){
-        for (int i = rect.x; i < rect.getMaxY(); i += 1){
+    for (int j = rect.y; j < rect.getMaxY(); j += 1){
+        for (int i = rect.x; i < rect.getMaxX(); i += 1){
             ofColor c = grayImg.getPixelsRef().getColor(i, j);
             if (kinect.getDistanceAt(i, j) > 0 && c != ofColor::black){
                 mesh.addColor(kinect.getColorAt(i,j));
