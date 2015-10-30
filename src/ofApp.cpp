@@ -67,7 +67,7 @@ void ofApp::drawBlobMesh(const ofxCvBlob &blob){
             }
         }
     }
-
+    ofPushMatrix();
     ofScale(1, -1, -1);
 	ofTranslate(0, 0, -1000); // center the points a bit
 	ofEnableDepthTest();
