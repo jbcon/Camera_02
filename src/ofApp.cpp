@@ -18,7 +18,7 @@ void ofApp::setup(){
 
     ofEnableLighting();
     pointLight.setPointLight();
-    pointLight.setAttenuation(0.7);
+    // pointLight.setAttenuation(0.2);
     pointLight.setPosition(0,0,0);
 
     shiny.setSpecularColor(ofColor::gold);
@@ -26,8 +26,10 @@ void ofApp::setup(){
     shiny.setShininess(0.9);
 
     // point cloud resolution
-    res = 5;
+    res = 4;
     capturing = true;
+    wireframe = false;
+    resChanged = false;
 }
 
 //--------------------------------------------------------------
@@ -51,7 +53,6 @@ void ofApp::update(){
         for (int i = 0; i < conFinder.nBlobs; i++){
             makeMesh(conFinder.blobs[i]);
         }
-
     }
 }
 
@@ -71,6 +72,11 @@ void ofApp::draw(){
     ofEnableDepthTest();
 
     for (int i = 0; i < meshes.size(); i++){
+        if (wireframe){
+            ofSetColor(ofColor::black);
+            meshes[i].drawWireframe();
+        }
+        ofSetColor(ofColor::white);
         meshes[i].draw();
     }
 
@@ -123,6 +129,18 @@ void ofApp::keyPressed(int key){
         case ' ':
             capturing = !capturing;
             break;
+        case 'w':
+            wireframe = !wireframe;
+            break;
+        case OF_KEY_UP:
+            res++;
+            break;
+        case OF_KEY_DOWN:
+            if (res > 3){
+                res--;
+            }
+
+            break;
         default:
             break;
     };
@@ -135,7 +153,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    pointLight.setPosition(x-ofGetWidth()/2,-y+ofGetHeight()/2,-100);
+    pointLight.setPosition(x-ofGetWidth()/2,-y+ofGetHeight()/2,-300);
 }
 
 //--------------------------------------------------------------

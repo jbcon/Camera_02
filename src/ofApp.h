@@ -35,6 +35,9 @@ class ofApp : public ofBaseApp{
         ofxCvContourFinder conFinder;
         ofEasyCam easyCam;
         int farThreshold, nearThreshold, res;
+
         bool capturing;
+        bool wireframe;
+        bool resChanged;
 
 };
