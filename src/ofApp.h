@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxKinect.h"
 #include "ofxOpenCv.h"
+#include "ofxDelaunay.h"
 
 class ofApp : public ofBaseApp{
 
