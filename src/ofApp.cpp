@@ -27,13 +27,14 @@ void ofApp::setup(){
 
     // point cloud resolution
     res = 5;
+    capturing = true;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     kinect.update();
 
-    if (kinect.isFrameNew()){
+    if (kinect.isFrameNew() && capturing){
         grayImg.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
         colorImg.setFromPixels(kinect.getPixels(), kinect.width, kinect.height);
         grayNear = grayImg;
@@ -46,6 +47,11 @@ void ofApp::update(){
 
         conFinder.findContours(grayImg, 400, (kinect.width * kinect.height)/2, 3, false);
 
+        meshes.clear();
+        for (int i = 0; i < conFinder.nBlobs; i++){
+            makeMesh(conFinder.blobs[i]);
+        }
+
     }
 }
 
@@ -57,17 +63,29 @@ void ofApp::draw(){
     easyCam.begin();
     pointLight.enable();
     shiny.begin();
-    for (int i = 0; i < conFinder.nBlobs; i++){
-        drawBlobMesh(conFinder.blobs[i]);
+
+    // ofNoFill();
+    ofPushMatrix();
+    ofScale(1, -1, -1);
+    ofTranslate(0, 0, -1000); // center the points a bit
+    ofEnableDepthTest();
+
+    for (int i = 0; i < meshes.size(); i++){
+        meshes[i].draw();
     }
-    ofDrawSphere(pointLight.getPosition(), 10);
+
+    // triangulation.draw();
+    ofDisableDepthTest();
+    ofPopMatrix();
+
+    // ofDrawSphere(pointLight.getPosition(), 10);
     shiny.end();
     pointLight.disable();
     easyCam.end();
 }
 
 
-void ofApp::drawBlobMesh(const ofxCvBlob &blob){
+void ofApp::makeMesh(const ofxCvBlob &blob){
     ofRectangle rect = blob.boundingRect;
     // ofMesh mesh;
     // mesh.setMode(OF_PRIMITIVE_POINTS);
@@ -93,15 +111,7 @@ void ofApp::drawBlobMesh(const ofxCvBlob &blob){
     }
     // mesh.smoothNormals(10);
 
-    // ofNoFill();
-    ofPushMatrix();
-    ofScale(1, -1, -1);
-	ofTranslate(0, 0, -1000); // center the points a bit
-	ofEnableDepthTest();
-	mesh.draw();
-    // triangulation.draw();
-	ofDisableDepthTest();
-	ofPopMatrix();
+    meshes.push_back(mesh);
 
     triangulation.reset();
     // cout << "DRAWN" << endl;
@@ -109,7 +119,13 @@ void ofApp::drawBlobMesh(const ofxCvBlob &blob){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    switch(key){
+        case ' ':
+            capturing = !capturing;
+            break;
+        default:
+            break;
+    };
 }
 
 //--------------------------------------------------------------
@@ -119,7 +135,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    pointLight.setPosition(x-ofGetWidth()/2,-y+ofGetHeight()/2,-300);
+    pointLight.setPosition(x-ofGetWidth()/2,-y+ofGetHeight()/2,-100);
 }
 
 //--------------------------------------------------------------

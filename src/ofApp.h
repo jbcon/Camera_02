@@ -12,7 +12,7 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 
-        void drawBlobMesh(const ofxCvBlob &blob);
+        void makeMesh(const ofxCvBlob &blob);
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -23,9 +23,10 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-        ofMaterial shiny;
-        ofMaterial diffuse;
+        vector<ofMesh> meshes;
 
+        ofMaterial shiny;
+        // ofMaterial diffuse;
         ofLight pointLight;
         ofxDelaunay triangulation;
         ofxKinect kinect;
@@ -34,5 +35,6 @@ class ofApp : public ofBaseApp{
         ofxCvContourFinder conFinder;
         ofEasyCam easyCam;
         int farThreshold, nearThreshold, res;
+        bool capturing;
 
 };
