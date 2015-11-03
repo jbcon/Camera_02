@@ -23,6 +23,11 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+        ofMaterial shiny;
+        ofMaterial diffuse;
+
+        ofLight pointLight;
+        ofxDelaunay triangulation;
         ofxKinect kinect;
         ofxCvGrayscaleImage grayImg, grayFar, grayNear;
         ofxCvColorImage colorImg;

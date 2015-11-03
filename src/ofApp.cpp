@@ -16,9 +16,17 @@ void ofApp::setup(){
     nearThreshold = 255;
     farThreshold = 150;
 
+    ofEnableLighting();
+    pointLight.setPointLight();
+    pointLight.setAttenuation(0.7);
+    pointLight.setPosition(0,0,0);
+
+    shiny.setSpecularColor(ofColor::gold);
+    shiny.setDiffuseColor(ofColor::gold);
+    shiny.setShininess(0.9);
 
     // point cloud resolution
-    res = 2;
+    res = 5;
 }
 
 //--------------------------------------------------------------
@@ -47,33 +55,56 @@ void ofApp::draw(){
     //  conFinder.draw();
     // determine valid points in blob
     easyCam.begin();
+    pointLight.enable();
+    shiny.begin();
     for (int i = 0; i < conFinder.nBlobs; i++){
         drawBlobMesh(conFinder.blobs[i]);
     }
+    ofDrawSphere(pointLight.getPosition(), 10);
+    shiny.end();
+    pointLight.disable();
     easyCam.end();
 }
 
 
 void ofApp::drawBlobMesh(const ofxCvBlob &blob){
     ofRectangle rect = blob.boundingRect;
-    ofMesh mesh;
-    mesh.setMode(OF_PRIMITIVE_POINTS);
-    for (int j = rect.y; j < rect.getMaxY(); j += 1){
-        for (int i = rect.x; i < rect.getMaxX(); i += 1){
+    // ofMesh mesh;
+    // mesh.setMode(OF_PRIMITIVE_POINTS);
+    ofxDelaunay triangulation;
+    for (int j = rect.y; j < rect.getMaxY(); j += res){
+        for (int i = rect.x; i < rect.getMaxX(); i += res){
             ofColor c = grayImg.getPixelsRef().getColor(i, j);
             if (kinect.getDistanceAt(i, j) > 0 && c != ofColor::black){
-                mesh.addColor(kinect.getColorAt(i,j));
-				mesh.addVertex(kinect.getWorldCoordinateAt(i, j));
+                // mesh.addColor(kinect.getColorAt(i,j));
+				// mesh.addVertex(kinect.getWorldCoordinateAt(i, j))
+                triangulation.addPoint(kinect.getWorldCoordinateAt(i,j));
             }
         }
     }
+    triangulation.triangulate();
+    ofMesh mesh = triangulation.triangleMesh;
+    vector<ofIndexType> indices = mesh.getIndices();
+    for (int i = 0; i < indices.size(); i++){
+        // ofVec2f point = vertices[i];
+        // mesh.addColor(colorImg.getPixelsRef().getColor(point.x, point.y));
+        // ofVec3f norm = mesh.getNormal(indices[i]);
+        // mesh.setNormal(indices[i], norm);
+    }
+    // mesh.smoothNormals(10);
+
+    // ofNoFill();
     ofPushMatrix();
     ofScale(1, -1, -1);
 	ofTranslate(0, 0, -1000); // center the points a bit
 	ofEnableDepthTest();
 	mesh.draw();
+    // triangulation.draw();
 	ofDisableDepthTest();
 	ofPopMatrix();
+
+    triangulation.reset();
+    // cout << "DRAWN" << endl;
 }
 
 //--------------------------------------------------------------
@@ -88,7 +119,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    pointLight.setPosition(x-ofGetWidth()/2,-y+ofGetHeight()/2,-300);
 }
 
 //--------------------------------------------------------------
